@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping; // 追加
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam; //追加
 
+
 @Controller
 @RequestMapping("country")
 public class CountryController {
@@ -50,14 +51,14 @@ public class CountryController {
    }
 
     // -- 削除画面 --
-    @GetMapping("/delete")
-    public String deleteCountryForm(Model model) {
+    @GetMapping("/delete/{code}/")
+    public String deleteCountryForm(@PathVariable String code, Model model) {
         // country/delete.htmlに画面遷移
         return "country/delete";
     }
 
     // ----　削除 -----
-    @PostMapping("/delete")
+    @PostMapping("/delete/")
     public String deleteCountry(@RequestParam("code") String code, Model model) {
         // 削除
         service.deleteCountry(code);
@@ -66,6 +67,15 @@ public class CountryController {
         return "redirect:/country/list";
     }
     // ---- 追加：ここまで ----
+
+    // 課題　追加
+    @GetMapping("/country/detail/{code}/")
+    public String getCountryDetail(@PathVariable String code, Model model) {
+        // 'code'に基づいて国の詳細を取得し、モデルに追加
+        Country country = service.getCountry(code);
+        model.addAttribute("country", country);
+        return "country/detail";
+    }
 
     }
 
